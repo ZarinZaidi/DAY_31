@@ -14,120 +14,120 @@ const taskData = JSON.parse(localStorage.getItem("data")) || [];
 let currentTask = {};
 
 const addOrUpdateTask = () => {
-addOrUpdateTaskBtn.innerText = "Add Task";
-const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
-const taskObj = {
-id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
-title: titleInput.value,
-date: dateInput.value,
-description: descriptionInput.value,
-};
+    addOrUpdateTaskBtn.innerText = "Add Task";
+    const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
+    const taskObj = {
+        id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
+        title: titleInput.value,
+        date: dateInput.value,
+        description: descriptionInput.value,
+    };
 
-if (dataArrIndex === -1) {
-taskData.unshift(taskObj);
-} else {
-taskData[dataArrIndex] = taskObj;
-}
+    if (dataArrIndex === -1) {
+        taskData.unshift(taskObj);
+    } else {
+        taskData[dataArrIndex] = taskObj;
+    }
 
-localStorage.setItem("data", JSON.stringify(taskData));
-updateTaskContainer()
-reset()
+    localStorage.setItem("data", JSON.stringify(taskData));
+    updateTaskContainer()
+    reset()
 };
 
 const updateTaskContainer = () => {
-tasksContainer.innerHTML = "";
+    tasksContainer.innerHTML = "";
 
-taskData.forEach(
-({ id, title, date, description, completed }) => {
-tasksContainer.innerHTML += `
+    taskData.forEach(
+        ({ id, title, date, description, completed }) => {
+            tasksContainer.innerHTML += `
 <div class="task ${completed ? 'completed' : ''}" id="${id}">
     <p><strong>Title:</strong> ${title}</p>
     <p><strong>Date:</strong> ${date}</p>
     <p><strong>Description:</strong> ${description}</p>
     <button onclick="editTask(this)" type="button" class="btn">Edit</button>
     <button onclick="deleteTask(this)" type="button" class="btn">Delete</button>
-    <input type="checkbox" onclick="markAsCompleted(this)" ${completed ? 'checked' : '' }> Complete
+    <input type="checkbox" onclick="markAsCompleted(this)" ${completed ? 'checked' : ''}> Complete
 </div>
 `;
-}
-);
+        }
+    );
 };
 
 
 const deleteTask = (buttonEl) => {
-const dataArrIndex = taskData.findIndex(
-(item) => item.id === buttonEl.parentElement.id
-);
+    const dataArrIndex = taskData.findIndex(
+        (item) => item.id === buttonEl.parentElement.id
+    );
 
-buttonEl.parentElement.remove();
-taskData.splice(dataArrIndex, 1);
-localStorage.setItem("data", JSON.stringify(taskData));
+    buttonEl.parentElement.remove();
+    taskData.splice(dataArrIndex, 1);
+    localStorage.setItem("data", JSON.stringify(taskData));
 }
 
 const editTask = (buttonEl) => {
-const dataArrIndex = taskData.findIndex(
-(item) => item.id === buttonEl.parentElement.id
-);
+    const dataArrIndex = taskData.findIndex(
+        (item) => item.id === buttonEl.parentElement.id
+    );
 
-currentTask = taskData[dataArrIndex];
+    currentTask = taskData[dataArrIndex];
 
-titleInput.value = currentTask.title;
-dateInput.value = currentTask.date;
-descriptionInput.value = currentTask.description;
+    titleInput.value = currentTask.title;
+    dateInput.value = currentTask.date;
+    descriptionInput.value = currentTask.description;
 
-addOrUpdateTaskBtn.innerText = "Update Task";
+    addOrUpdateTaskBtn.innerText = "Update Task";
 
-taskForm.classList.toggle("hidden");
+    taskForm.classList.toggle("hidden");
 }
 
 const markAsCompleted = (checkboxEl) => {
-const taskEl = checkboxEl.parentElement;
-const dataArrIndex = taskData.findIndex(
-(item) => item.id === taskEl.id
-);
+    const taskEl = checkboxEl.parentElement;
+    const dataArrIndex = taskData.findIndex(
+        (item) => item.id === taskEl.id
+    );
 
-taskData[dataArrIndex].completed = checkboxEl.checked;
-localStorage.setItem("data", JSON.stringify(taskData));
-taskEl.classList.toggle("completed");
+    taskData[dataArrIndex].completed = checkboxEl.checked;
+    localStorage.setItem("data", JSON.stringify(taskData));
+    taskEl.classList.toggle("completed");
 }
 
 const reset = () => {
-titleInput.value = "";
-dateInput.value = "";
-descriptionInput.value = "";
-taskForm.classList.toggle("hidden");
-currentTask = {};
+    titleInput.value = "";
+    dateInput.value = "";
+    descriptionInput.value = "";
+    taskForm.classList.toggle("hidden");
+    currentTask = {};
 }
 
-if(taskData.length){
-updateTaskContainer()
+if (taskData.length) {
+    updateTaskContainer()
 }
 
 openTaskFormBtn.addEventListener("click", () =>
-taskForm.classList.toggle("hidden")
+    taskForm.classList.toggle("hidden")
 );
 
 closeTaskFormBtn.addEventListener("click", () => {
-const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
-const formInputValuesUpdated = titleInput.value !== currentTask.title || dateInput.value !== currentTask.date ||
-descriptionInput.value !== currentTask.description;
+    const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
+    const formInputValuesUpdated = titleInput.value !== currentTask.title || dateInput.value !== currentTask.date ||
+        descriptionInput.value !== currentTask.description;
 
-if (formInputsContainValues && formInputValuesUpdated) {
-confirmCloseDialog.showModal();
-} else {
-reset();
-}
+    if (formInputsContainValues && formInputValuesUpdated) {
+        confirmCloseDialog.showModal();
+    } else {
+        reset();
+    }
 });
 
 cancelBtn.addEventListener("click", () => confirmCloseDialog.close());
 
 discardBtn.addEventListener("click", () => {
-confirmCloseDialog.close();
-reset()
+    confirmCloseDialog.close();
+    reset()
 });
 
 taskForm.addEventListener("submit", (e) => {
-e.preventDefault();
+    e.preventDefault();
 
-addOrUpdateTask();
+    addOrUpdateTask();
 });
